@@ -1,0 +1,602 @@
+:root {
+    --bg-light: #0d1117;
+    --card-bg: rgba(22, 27, 34, 0.85);
+    --text-main: #f0f6fc;
+    --text-muted: #8b949e;
+    --accent-blue: #3b82f6;
+    --border-light: #30363d;
+    --input-bg: #0d1117;
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    /* Cursor handled by style.css */
+}
+
+/* Container is now invisible, just holding the bricks */
+.modern-login-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    perspective: 1000px;
+    /* For 3D fall effect */
+    animation: none;
+    margin-top: 0;
+}
+
+/* Clean Modern Card Style (removed Lego) */
+.modern-login-card::before {
+    display: none;
+}
+
+/* Clean element styling */
+.login-header,
+.input-group-modern,
+.modern-btn {
+    opacity: 1;
+    transform: none;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.login-header {
+    animation-delay: 0s;
+}
+
+.input-group-modern:nth-of-type(1) {
+    animation-delay: 0.1s;
+}
+
+.input-group-modern:nth-of-type(2) {
+    animation-delay: 0.2s;
+}
+
+/* Fade In Animation */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Clean login header */
+.login-header {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+/* Remove studs */
+.login-header::before,
+.input-group-modern::before,
+.modern-btn::before {
+    display: none;
+}
+
+
+
+.login-header {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 0 10px rgba(0, 240, 255, 0.3),
+        0 0 20px rgba(0, 240, 255, 0.2);
+    margin-bottom: 1.5rem;
+    color: #00f0ff;
+    filter: drop-shadow(0 0 5px #00f0ff);
+}
+
+.login-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00f0ff;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 0.05em;
+    text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00f0ff,
+        0 0 40px #00aaff,
+        0 0 80px #00aaff;
+    animation: illuminatedPulse 2s ease-in-out infinite;
+}
+
+@keyframes illuminatedPulse {
+
+    0%,
+    100% {
+        text-shadow:
+            0 0 5px #00f0ff,
+            0 0 10px #00f0ff,
+            0 0 20px #00f0ff,
+            0 0 40px #00aaff,
+            0 0 80px #00aaff;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #00f0ff,
+            0 0 20px #00f0ff,
+            0 0 40px #00f0ff,
+            0 0 80px #00aaff,
+            0 0 120px #00aaff;
+    }
+}
+
+/* ===== GLITCH EFFECT ===== */
+.glitch {
+    position: relative;
+    animation: glitchMain 3s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d1117;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00ff;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    animation: glitchTop 2.5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: 2px 0 #00ffff;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+    animation: glitchBottom 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitchMain {
+
+    0%,
+    90%,
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    91% {
+        opacity: 0.8;
+        transform: translateX(-2px);
+    }
+
+    92% {
+        opacity: 1;
+        transform: translateX(2px);
+    }
+
+    93% {
+        opacity: 0.9;
+        transform: translateX(0);
+    }
+}
+
+@keyframes glitchTop {
+
+    0%,
+    85%,
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        transform: translateX(0);
+    }
+
+    86% {
+        clip-path: polygon(0 15%, 100% 15%, 100% 30%, 0 30%);
+        transform: translateX(-5px);
+    }
+
+    88% {
+        clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%);
+        transform: translateX(5px);
+    }
+
+    90% {
+        clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        transform: translateX(0);
+    }
+}
+
+@keyframes glitchBottom {
+
+    0%,
+    80%,
+    100% {
+        clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        transform: translateX(0);
+    }
+
+    82% {
+        clip-path: polygon(0 75%, 100% 75%, 100% 90%, 0 90%);
+        transform: translateX(3px);
+    }
+
+    84% {
+        clip-path: polygon(0 80%, 100% 80%, 100% 95%, 0 95%);
+        transform: translateX(-3px);
+    }
+
+    86% {
+        clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        transform: translateX(0);
+    }
+}
+
+.login-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 280px;
+    margin: 0;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-group-modern {
+    position: relative;
+    width: 100%;
+}
+
+.input-group-modern input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    /* Space for icon */
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    color: #00f0ff;
+    transition: all 0.3s;
+    outline: none;
+    font-family: inherit;
+    text-shadow: 0 0 5px #00f0ff;
+}
+
+.input-group-modern input::placeholder {
+    color: rgba(0, 240, 255, 0.5);
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+}
+
+.input-group-modern input:focus {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #00f0ff;
+    box-shadow:
+        0 0 10px rgba(0, 240, 255, 0.3),
+        0 0 20px rgba(0, 240, 255, 0.2),
+        inset 0 0 10px rgba(0, 240, 255, 0.1);
+    text-shadow: 0 0 10px #00f0ff;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00f0ff;
+    display: flex;
+    pointer-events: none;
+    filter: drop-shadow(0 0 5px #00f0ff);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+}
+
+.forgot-password {
+    text-align: right;
+    font-size: 0.8125rem;
+    margin-top: -0.25rem;
+}
+
+.forgot-password a {
+    color: #00f0ff;
+    text-decoration: none;
+    font-weight: 500;
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+    transition: all 0.3s;
+}
+
+.forgot-password a:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
+    text-decoration: none;
+}
+
+.modern-btn {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.2), rgba(0, 170, 255, 0.1));
+    color: #00f0ff;
+    border: 2px solid #00f0ff;
+    padding: 0.875rem;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+    font-family: inherit;
+    text-shadow: 0 0 10px #00f0ff;
+    box-shadow:
+        0 0 10px rgba(0, 240, 255, 0.3),
+        inset 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+.modern-btn:hover {
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.4), rgba(0, 170, 255, 0.2));
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 20px rgba(0, 240, 255, 0.5),
+        0 0 40px rgba(0, 240, 255, 0.3),
+        inset 0 0 15px rgba(0, 240, 255, 0.2);
+    text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+}
+
+.modern-btn:active {
+    transform: scale(0.98);
+    box-shadow:
+        0 0 30px rgba(0, 240, 255, 0.6),
+        inset 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 2rem 0 1.5rem 0;
+    color: var(--border-light);
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+    /* dashed or solid? Image isn't super clear but looks like a line with dots or just solid. */
+    background-image: linear-gradient(to right, var(--border-light) 50%, transparent 50%);
+    background-size: 8px 1px;
+    background-repeat: repeat-x;
+}
+
+.divider span {
+    padding: 0 1rem;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.social-login {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    background: var(--input-bg);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.social-btn:hover {
+    background: var(--card-bg);
+    border-color: var(--text-muted);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.social-btn svg {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.1));
+}
+
+/* Warning Overlay */
+.warning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: red;
+    font-family: var(--font-mono);
+}
+
+.warning-content {
+    animation: shake 0.5s infinite;
+}
+
+.warning-content h1 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+}
+
+.warning-content p {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.warning-content .large-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: red;
+}
+
+.blink-red {
+    animation: blinkRed 0.5s infinite;
+}
+
+@keyframes blinkRed {
+
+    0%,
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 20px red;
+    }
+
+    50% {
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+/* Ensure white logos for dark theme if needed, though colored ones are usually fine */
+.social-btn.maple svg {
+    fill: white;
+}
+
+.social-btn.apple svg {
+    fill: white;
+}
+
+.error-msg {
+    color: #ff3333;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    width: 100%;
+    text-shadow:
+        0 0 5px #ff3333,
+        0 0 10px #ff3333,
+        0 0 20px #ff0000;
+    animation: errorPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px #ff3333, 0 0 10px #ff3333, 0 0 20px #ff0000;
+    }
+
+    50% {
+        text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 40px #ff0000;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Success Transition (inherited from old logic but styled for new) */
+.access-granted-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    text-align: center;
+    animation: fadeUp 0.5s ease-out;
+}
+
+.access-granted-msg h1 {
+    font-family: var(--font-ui);
+    font-size: 2rem;
+    font-weight: 800;
+    color: #10b981;
+    /* Success Green */
+}

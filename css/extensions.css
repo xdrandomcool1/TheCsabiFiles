@@ -1,0 +1,123 @@
+/* Custom Cursor Removed - Reverted to System Cursor */
+
+body {
+    /* Mysterious Background */
+    background-color: #050505;
+    background-image:
+        radial-gradient(circle at 50% 50%, rgba(20, 30, 40, 0.4) 0%, transparent 80%),
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(30, 40, 50, 0.1) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(30, 40, 50, 0.1) 20px);
+    background-size: 100% 100%, 20px 20px, 20px 20px;
+    background-attachment: fixed;
+    /* Cursor: auto is default */
+}
+
+/* 3D Plane Container */
+.plane-container-3d {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    /* Behind header (100) but above background */
+    pointer-events: none;
+    /* Crucial: Let clicks pass through */
+    overflow: hidden;
+}
+
+/* Scroll Animations */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Enhance existing hover effects */
+a,
+button,
+.evidence-card,
+.btn-control,
+tr,
+input {
+    cursor: pointer;
+    /* Restore pointer for interactive elements */
+}
+
+/* Page Entrance Animation */
+body.fade-in-enter {
+    animation: pageEnter 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageEnter {
+    0% {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(1.05);
+        /* Start slightly zoomed in */
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+
+    }
+}
+
+/* 
+   ============================
+   Plane Takeoff Animation 
+   ============================
+*/
+.plane-container {
+    position: fixed;
+    bottom: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    z-index: 50;
+    /* Behind header but visible */
+    pointer-events: none;
+    opacity: 0;
+
+    /* Animation triggers when body has .fade-in-enter */
+}
+
+body.fade-in-enter .plane-container {
+    animation: planeTakeoff 4s cubic-bezier(0.45, 0, 0.1, 1) forwards;
+    animation-delay: 0.5s;
+    /* Wait slightly for page fade-in */
+}
+
+.blueprint-plane {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+}
+
+@keyframes planeTakeoff {
+    0% {
+        bottom: -20vh;
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8) rotate(0deg);
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    100% {
+        bottom: 120vh;
+        /* Fly completely off screen */
+        opacity: 1;
+        /* Fade out near end? */
+        transform: translateX(-50%) scale(1.5) rotate(5deg);
+    }
+}
