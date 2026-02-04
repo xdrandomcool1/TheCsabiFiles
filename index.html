@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Csábi Files - Classified Records</title>
+    <meta name="description" content="Titkosított dokumentumok és rekordok böngészője">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/extensions.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body class="fade-in-enter">
+
+    <!-- Particle Network Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Radar Ping Effect -->
+    <div class="radar-container">
+        <div class="radar-ping"></div>
+        <div class="radar-ping"></div>
+        <div class="radar-ping"></div>
+    </div>
+
+    <style>
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .radar-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .radar-ping {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(0, 240, 255, 0.4);
+            border-radius: 50%;
+            animation: radarPing 4s infinite;
+        }
+
+        .radar-ping:nth-child(2) {
+            animation-delay: 1.3s;
+        }
+
+        .radar-ping:nth-child(3) {
+            animation-delay: 2.6s;
+        }
+
+        @keyframes radarPing {
+            0% {
+                width: 50px;
+                height: 50px;
+                opacity: 0.6;
+            }
+
+            100% {
+                width: 800px;
+                height: 800px;
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <!-- 3D Plane Container -->
+    <div id="three-container" class="plane-container-3d"></div>
+
+    <!-- Three.js Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/libs/fflate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/FBXLoader.js"></script>
+
+    <!-- Landing Page Removed (Now in login.html) -->
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect x="4" y="4" width="24" height="24" rx="2" stroke="currentColor" stroke-width="2" />
+                    <path d="M12 16L14.5 18.5L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <h1>THE CSÁBI FILES</h1>
+            </div>
+            <div class="classification">
+                <span class="classified-badge">CLASSIFIED</span>
+                <span class="clearance">CLEARANCE LEVEL: 5</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="intro-section">
+                <div class="file-header">
+                    <div class="file-icon">📁</div>
+                    <div class="file-info">
+                        <h2>CASE FILE #001</h2>
+                        <p class="file-meta">
+                            <span>Utolsó módosítás: <time>2026-02-04</time></span>
+                            <span>•</span>
+                            <span>Rekordok: <strong id="record-count">0</strong></span>
+                            <span>•</span>
+                            <span>Státusz: <span class="status-active">AKTÍV</span></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="controls">
+
+                    <button class="btn-control" id="filter-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Szűrés</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table class="data-table" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fotó</th>
+                                <th>Személyes Adatok</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Data will be injected by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Evidence Section -->
+            <div class="evidence-section">
+                <div class="section-header">
+                    <!-- Surveillance Feed with Minigame -->
+                    <div class="surveillance-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <h2>SIGNAL DECRYPTION / JEL DEKÓDOLÁS</h2>
+                            </div>
+                        </div>
+
+                        <div class="surveillance-grid"
+                            style="grid-template-columns: 1fr; max-width: 800px; margin: 20px auto;">
+                            <!-- Cam 4 - Interactive Hacking Game (Now Main Feature) -->
+                            <div class="feed-item interactive-feed" id="interactive-feed">
+                                <div class="cam-overlay">
+                                    <span class="cam-id">CAM-04 [ENCRYPTED]</span>
+                                    <span class="rec-dot hidden" id="cam-4-rec"></span>
+                                </div>
+
+                                <!-- Encrypted Image -->
+                                <img id="secret-feed-img" src="images/portraits/girl_1.jpg"
+                                    style="filter: blur(20px) grayscale(1); opacity: 0.3;" alt="Secret Feed">
+
+                                <!-- Game Start Interface -->
+                                <div id="hack-start-screen" class="hack-interface">
+                                    <div class="lock-icon">🔒</div>
+                                    <p>ENCRYPTED SIGNAL DETECTED</p>
+                                    <button id="start-hack-btn" class="hack-btn">INITIATE DECRYPTION</button>
+                                </div>
+
+                                <!-- Game UI (Hidden initially) -->
+                                <div id="hack-game-ui" class="hack-interface hidden">
+                                    <div class="hack-display">
+                                        <span id="hack-status">SEARCHING...</span>
+                                        <span id="signal-val">0%</span>
+                                    </div>
+                                    <input type="range" min="0" max="100" value="0" class="freq-slider"
+                                        id="freq-slider">
+                                    <p class="hack-instruction">Adjust frequency to lock signal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="evidence-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <polyline points="10 9 9 9 8 9" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <h2>EVIDENCE LOCKER / BIZONYÍTÉKOK</h2>
+                            </div>
+                        </div>
+
+                        <div class="evidence-grid">
+                            <div class="evidence-card"
+                                onclick="openEvidenceModal('images/flight_record_pooleys.jpg', 'FLIGHT MANIFEST #8392')">
+                                <div class="evidence-image-container">
+                                    <img src="images/flight_record_pooleys.jpg" alt="Flight Record" loading="lazy">
+                                    <div class="overlay">MEGTEKINTÉS</div>
+                                </div>
+                                <div class="evidence-info">
+                                    <h3>FLIGHT MANIFEST #8392</h3>
+                                    <p>Típus: Scanned Document</p>
+                                </div>
+                            </div>
+
+                            <div class="evidence-card"
+                                onclick="openEvidenceModal('images/bank_wire.png', 'BANK WIRE TRANSFER')">
+                                <div class="evidence-image-container">
+                                    <img src="images/bank_wire.png" alt="Bank Statement" loading="lazy">
+                                    <div class="overlay">MEGTEKINTÉS</div>
+                                </div>
+                                <div class="evidence-info">
+                                    <h3>BANK WIRE TRANSFER</h3>
+                                    <p>Típus: Financial Record</p>
+                                </div>
+                            </div>
+
+                            <div class="evidence-card"
+                                onclick="openEvidenceModal('images/surveillance_log.png', 'INTERCEPTED CHAT LOG')">
+                                <div class="evidence-image-container">
+                                    <img src="images/surveillance_log.png" alt="Surveillance Log" loading="lazy">
+                                    <div class="overlay">MEGTEKINTÉS</div>
+                                </div>
+                                <div class="evidence-info">
+                                    <h3>INTERCEPTED CHAT LOG</h3>
+                                    <p>Típus: Surveillance Data</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="about-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                </svg>
+                                <h2>TARGET PROFILE / CÉLSZEMÉLY</h2>
+                            </div>
+                        </div>
+
+                        <div class="file-header about-card">
+                            <div class="about-image-wrapper">
+                                <!-- Use the file name provided by user -->
+                                <img src="images/IMG_8122.JPG" alt="Csábi Csongor" class="profile-large">
+                                <div class="overlay-scan"></div>
+                            </div>
+                            <div class="about-details">
+                                <h3 class="subject-name">CSÁBI CSONGOR</h3>
+                                <p class="subject-role">Security Level: ULTRA</p>
+
+                                <div class="bio-text">
+                                    <p><strong>HISTORY:</strong> Codename "The Host". Intelligence reports confirm a
+                                        consistent pattern: multiple female assets are frequently intercepted entering
+                                        his secure sector for "private summits." He doesn't go to the party; the party
+                                        goes to him.</p>
+
+                                    <p><strong>STATUS:</strong> HIGH TRAFFIC. His base of operations is a known hotspot.
+                                        Specializes in "invitation-only" protocols tailored for high-value female
+                                        targets.</p>
+
+                                    <p class="warning-text">CAUTION: Subject possesses Level 10 Charisma. Known to
+                                        invite targets to his location with a 99% success rate.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evidence Modal Moved to End of Body -->
+
+                    <div class="warning-banner">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                                stroke="currentColor" stroke-width="2" />
+                            <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" />
+                            <circle cx="12" cy="17" r="1" fill="currentColor" />
+                        </svg>
+                        <p>Ez a dokumentum szigorúan bizalmas információkat tartalmaz. Az illetéktelen hozzáférés súlyos
+                            következményekkel járhat.</p>
+                    </div>
+                </div>
+    </main>
+
+    <footer class="footer">
+        <p>THE CSÁBI FILES © 2026 • Minden jog fenntartva • Titkosítva AES-256 biztonsággal</p>
+    </footer>
+
+    <!-- Evidence Modal -->
+    <div id="evidence-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">EVIDENCE VIEW</h3>
+            <div class="modal-image-wrapper">
+                <img id="modal-image" src="images/flight_record_pooleys.jpg" alt="Evidence Full">
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/plane_anim.js"></script>
+
+    <!-- Particle Network Animation -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('particle-canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleCount = 60;
+            const connectionDistance = 120;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = Math.random() * 2 + 1;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function drawConnections() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < connectionDistance) {
+                            const opacity = 1 - (distance / connectionDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity * 0.15})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                drawConnections();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+    </script>
+</body>
+
+</html>

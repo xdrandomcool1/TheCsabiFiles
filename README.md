@@ -52,21 +52,31 @@ Egy immerzív, cyberpunk stílusú interaktív weboldal titkosított aktákkal, 
 
 ```
 The Csábi Files/
-├── login.html          # Bejelentkező oldal
 ├── index.html          # Főoldal - akták, bizonyítékok
-├── spaceship.html      # 🚀 Bonus: Űrhajó irányítópult
-├── style.css           # Fő stílusok
-├── landing.css         # Login oldal stílusok
-├── extensions.css      # Kiegészítő stílusok
-├── script.js           # Fő JavaScript logika
-├── plane_anim.js       # Repülőgép Three.js animáció
-├── img/                # Képek mappa
+├── login.html          # Bejelentkező oldal
+├── README.md           # Ez a fájl
+│
+├── css/                # Stílusok
+│   ├── style.css       # Fő stílusok
+│   ├── landing.css     # Login oldal stílusok
+│   └── extensions.css  # Kiegészítő stílusok
+│
+├── js/                 # JavaScript fájlok
+│   ├── script.js       # Fő JavaScript logika
+│   └── plane_anim.js   # Repülőgép Three.js animáció
+│
+├── images/             # Képek
 │   ├── portraits/      # Profilképek
-│   └── IMG_8122.JPG    # Célszemély fotó
-├── flight_record_pooleys.jpg  # Bizonyíték: repülési napló
-├── bank_wire.png              # Bizonyíték: banki átutalás
-├── surveillance_log.png       # Bizonyíték: megfigyelési napló
-└── README.md           # Ez a fájl
+│   ├── IMG_8122.JPG    # Célszemély fotó
+│   ├── flight_record_pooleys.jpg  # Bizonyíték: repülési napló
+│   ├── bank_wire.png              # Bizonyíték: banki átutalás
+│   └── surveillance_log.png       # Bizonyíték: megfigyelési napló
+│
+├── download/           # Letölthető fájlok
+│   └── falcon2.fbx     # 3D repülőgép modell
+│
+├── fonts/              # Egyedi betűtípusok
+└── logo/               # Logó fájlok
 ```
 
 ---

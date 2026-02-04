@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE LOGIN - The Csábi Files</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000000;
+            /* Midnight black background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #e6edf3;
+        }
+
+        .access-granted-msg {
+            color: #4ade80;
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            letter-spacing: 0.2em;
+            text-align: center;
+            animation: pulse 1s infinite;
+            display: none;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        }
+
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            pointer-events: none;
+            overflow: hidden;
+            display: none;
+        }
+
+        /* ===== PARTICLE NETWORK ===== */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== RADAR PING ===== */
+        .radar-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .radar-ping {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(0, 240, 255, 0.6);
+            border-radius: 50%;
+            animation: radarPing 3s infinite;
+        }
+
+        .radar-ping:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .radar-ping:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        @keyframes radarPing {
+            0% {
+                width: 50px;
+                height: 50px;
+                opacity: 0.8;
+                border-color: rgba(0, 240, 255, 0.8);
+            }
+
+            100% {
+                width: 600px;
+                height: 600px;
+                opacity: 0;
+                border-color: rgba(0, 240, 255, 0);
+            }
+        }
+
+        /* Ensure login card is above effects */
+        .modern-login-card {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle Network Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Radar Ping Effect -->
+    <div class="radar-container">
+        <div class="radar-ping"></div>
+        <div class="radar-ping"></div>
+        <div class="radar-ping"></div>
+    </div>
+
+
+    <!-- Warning Overlay -->
+    <div id="intro-warning" class="warning-overlay" style="display: none;">
+        <div class="warning-content">
+            <h1 class="blink-red">FIGYELEM</h1>
+            <p class="large-text">TITKOSÍTOTT ADATOK VANNAK AZ OLDALON</p>
+            <p>EZ AZ OLDAL NEM MINDENKINEK VALÓ.</p>
+            <p class="blink-red">FORDULJ VISSZA!</p>
+        </div>
+    </div>
+    <!-- Login Container -->
+    <!-- Login Container -->
+    <div id="landing-page" class="modern-login-card">
+        <div class="login-header">
+            <div class="login-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+            </div>
+            <h1 class="login-title">The Csábi Files 2026</h1>
+            <p class="login-desc"></p>
+        </div>
+
+        <div class="login-form">
+            <div class="input-group-modern">
+                <div class="input-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <input type="text" id="username" placeholder="Email" autocomplete="off" autofocus>
+            </div>
+            <div class="input-group-modern">
+                <div class="input-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <input type="password" id="password" placeholder="Password">
+                <div class="password-toggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                        <path
+                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                        </path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </div>
+            </div>
+            <div class="forgot-password">
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <div id="login-error" class="hidden error-msg">Invalid email or password</div>
+            <button id="login-btn" class="modern-btn">Login</button>
+        </div>
+
+
+    </div>
+
+    <!-- Success Message Container (Hidden initially) -->
+    <div id="success-msg" class="access-granted-msg">
+        <h1>ACCESS GRANTED</h1>
+    </div>
+
+    <!-- 3D Particle Logo Container -->
+    <div id="particle-logo-container"></div>
+
+    <div id="three-container"></div>
+
+    <style>
+        #particle-logo-container {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 120px;
+            z-index: 5;
+            pointer-events: none;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/fflate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="js/plane_anim.js"></script>
+
+    <!-- 3D PARTICLE LOGO & LOCK SCRIPT -->
+    <script>
+        // ===== 3D PARTICLE LOGO =====
+        (function () {
+            const container = document.getElementById('particle-logo-container');
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 400 / 120, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(400, 120);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            camera.position.z = 30;
+
+            // Create text positions for "CSÁBI"
+            const textPositions = [];
+            const text = "CSÁBI";
+            const spacing = 8;
+            const startX = -(text.length * spacing) / 2;
+
+            // Generate particle positions for each letter
+            for (let i = 0; i < text.length; i++) {
+                const x = startX + i * spacing;
+                // Create dots in a letter-like pattern
+                for (let j = 0; j < 15; j++) {
+                    textPositions.push({
+                        x: x + (Math.random() - 0.5) * 5,
+                        y: (Math.random() - 0.5) * 8,
+                        z: (Math.random() - 0.5) * 2
+                    });
+                }
+            }
+
+            // Create particles
+            const particleCount = textPositions.length;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const originalPositions = new Float32Array(particleCount * 3);
+            const targetPositions = new Float32Array(particleCount * 3);
+
+            // Random start positions
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+
+                originalPositions[i * 3] = positions[i * 3];
+                originalPositions[i * 3 + 1] = positions[i * 3 + 1];
+                originalPositions[i * 3 + 2] = positions[i * 3 + 2];
+
+                targetPositions[i * 3] = textPositions[i].x;
+                targetPositions[i * 3 + 1] = textPositions[i].y;
+                targetPositions[i * 3 + 2] = textPositions[i].z;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0x00f0ff,
+                size: 0.8,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Animation
+            let progress = 0;
+            let animating = true;
+            const animationDuration = 3000;
+            const startTime = Date.now();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                if (animating) {
+                    const elapsed = Date.now() - startTime;
+                    progress = Math.min(elapsed / animationDuration, 1);
+
+                    // Ease out cubic
+                    const ease = 1 - Math.pow(1 - progress, 3);
+
+                    const pos = geometry.attributes.position.array;
+                    for (let i = 0; i < particleCount; i++) {
+                        pos[i * 3] = originalPositions[i * 3] + (targetPositions[i * 3] - originalPositions[i * 3]) * ease;
+                        pos[i * 3 + 1] = originalPositions[i * 3 + 1] + (targetPositions[i * 3 + 1] - originalPositions[i * 3 + 1]) * ease;
+                        pos[i * 3 + 2] = originalPositions[i * 3 + 2] + (targetPositions[i * 3 + 2] - originalPositions[i * 3 + 2]) * ease;
+                    }
+                    geometry.attributes.position.needsUpdate = true;
+
+                    if (progress >= 1) animating = false;
+                }
+
+                // Gentle float after forming
+                if (!animating) {
+                    const time = Date.now() * 0.001;
+                    particles.rotation.y = Math.sin(time * 0.5) * 0.1;
+                    particles.position.y = Math.sin(time) * 0.5;
+                }
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        })();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginBtn = document.getElementById('login-btn');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('login-error');
+            const loginContainer = document.getElementById('login-container');
+            const successMsg = document.getElementById('success-msg');
+            const fakeIp = document.getElementById('fake-ip');
+            const warningOverlay = document.getElementById('intro-warning');
+
+            // Generate fake IP
+            if (fakeIp) {
+                fakeIp.textContent = `192.168.0.${Math.floor(Math.random() * 255)}`;
+            }
+
+            if (loginBtn) {
+                loginBtn.addEventListener('click', attemptLogin);
+                passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') attemptLogin();
+                });
+            }
+
+            function attemptLogin() {
+                const user = usernameInput.value.trim();
+                const pass = passwordInput.value.trim();
+                const landingPage = document.getElementById('landing-page');
+
+                if (user.length > 0 && pass.length > 0) {
+                    // SUCCESS SEQUENCE
+
+                    // 1. Instantly hide the login card and particle logo
+                    if (landingPage) {
+                        landingPage.style.display = 'none';
+                    }
+                    const particleLogo = document.getElementById('particle-logo-container');
+                    if (particleLogo) particleLogo.style.display = 'none';
+
+                    // Hide radar pings
+                    const radarContainer = document.querySelector('.radar-container');
+                    if (radarContainer) radarContainer.style.display = 'none';
+
+                    // 2. Show Warning
+                    if (warningOverlay) {
+                        warningOverlay.style.display = 'flex';
+
+                        // 3. Wait 3 seconds then plane animation
+                        setTimeout(() => {
+                            warningOverlay.style.display = 'none';
+
+                            if (window.launchPlane) {
+                                window.launchPlane(() => {
+                                    window.location.href = 'index.html';
+                                });
+                            } else {
+                                window.location.href = 'index.html';
+                            }
+                        }, 3000);
+                    } else {
+                        // Fallback
+                        if (window.launchPlane) {
+                            window.launchPlane(() => window.location.href = 'index.html');
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }
+
+                } else {
+                    // ERROR
+                    loginError.classList.remove('hidden');
+                    loginError.textContent = "ACCESS DENIED: CREDENTIALS REQUIRED";
+                    setTimeout(() => {
+                        loginError.classList.add('hidden');
+                    }, 3000);
+                }
+            }
+        });
+
+        // ===== TYPEWRITER EFFECT FOR PLACEHOLDERS =====
+        function typewriterPlaceholder(input, text, speed = 100) {
+            let i = 0;
+            input.placeholder = '';
+            input.dataset.originalPlaceholder = text;
+
+            function type() {
+                if (i < text.length) {
+                    input.placeholder += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed + Math.random() * 50);
+                }
+            }
+            type();
+        }
+
+        // Start typewriter on page load with delays
+        setTimeout(() => {
+            typewriterPlaceholder(document.getElementById('username'), 'Enter your email...', 80);
+        }, 1500);
+
+        setTimeout(() => {
+            typewriterPlaceholder(document.getElementById('password'), 'Enter password...', 80);
+        }, 3000);
+
+        // Re-type on focus if empty
+        document.querySelectorAll('.input-group-modern input').forEach(input => {
+            input.addEventListener('focus', function () {
+                if (this.value === '' && this.dataset.originalPlaceholder) {
+                    typewriterPlaceholder(this, this.dataset.originalPlaceholder, 40);
+                }
+            });
+        });
+
+        // ===== PARTICLE NETWORK =====
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 80;
+        const connectionDistance = 150;
+        const particleColor = 'rgba(0, 240, 255, 0.6)';
+        const lineColor = 'rgba(0, 240, 255, 0.15)';
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particleColor;
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        const opacity = 1 - (distance / connectionDistance);
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${opacity * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+    </script>
+</body>
+
+</html>
