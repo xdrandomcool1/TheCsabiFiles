@@ -19,9 +19,9 @@ const cities = [
 const domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'];
 
 const portraitImages = [
-    'img/portraits/girl_1.png',
-    'img/portraits/girl_2.png',
-    'img/portraits/girl_3.png'
+    'images/portraits/girl_1.png',
+    'images/portraits/girl_2.png',
+    'images/portraits/girl_3.png'
 ];
 
 function generateRandomData(count) {
@@ -55,9 +55,9 @@ function generateRandomData(count) {
 
         // girl_1, girl_2, girl_3 are PNG, girl_4 onwards are JPG
         if (imgIndex <= 3) {
-            portrait = `img/portraits/girl_${imgIndex}.png`;
+            portrait = `images/portraits/girl_${imgIndex}.png`;
         } else {
-            portrait = `img/portraits/girl_${imgIndex}.jpg`;
+            portrait = `images/portraits/girl_${imgIndex}.jpg`;
         }
 
         // Randomly decide which fields are redacted (Reduced probability: ~15-20%)
