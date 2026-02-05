@@ -53,7 +53,7 @@ function generateRandomData(count) {
         let portrait;
         const imgIndex = (i % 50) + 1; // 1 to 50
 
-        // We have 3 high-quality AI generated PNGs, and 47 downloaded JPGs
+        // girl_1, girl_2, girl_3 are PNG, girl_4 onwards are JPG
         if (imgIndex <= 3) {
             portrait = `img/portraits/girl_${imgIndex}.png`;
         } else {
